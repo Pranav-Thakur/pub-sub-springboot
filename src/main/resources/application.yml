@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: pub-sub-service
+
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+
+# remove this line if u want .sql file to be processed
+  sql:
+    init:
+      mode: never
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/pubsub_db
+    # for h2 jdbc:h2:mem:testdb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #for h2 org.h2.Driver
+    username: root
+    #for h2 sa
+    password: kumar9905
+      #for h2 no password
+
+    jpa:
+      hibernate:
+        ddl-auto: none # don't auto-create tables if using schema.sql
+      show-sql: true
+      database-platform:  org.hibernate.dialect.MySQL8Dialect
+      #for h2 org.hibernate.dialect.H2Dialect
+      properties:
+        hibernate:
+          format_sql: true
