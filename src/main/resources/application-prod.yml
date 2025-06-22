@@ -7,6 +7,8 @@ spring:
   application:
     name: pub-sub-service
 
+  config:
+    import: /etc/secrets/secret.properties
 #  h2:
 #    console:
 #      enabled: true
@@ -18,10 +20,10 @@ spring:
       mode: never
 
   datasource:
-    url: jdbc:mysql://localhost:3306/pubsub_db
+    url: ${db.url}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: kumar9905
+    username: ${db.username}
+    password: ${db.password}
 
     jpa:
       hibernate:

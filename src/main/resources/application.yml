@@ -5,6 +5,8 @@ spring:
   application:
     name: pub-sub-service
 
+  config:
+    import: /etc/secrets/secret.properties
 #  h2:
 #    console:
 #      enabled: true
@@ -16,13 +18,13 @@ spring:
       mode: never
 
   datasource:
-    url: jdbc:mysql://localhost:3306/pubsub_db
+    url: ${db.url}
     # for h2 jdbc:h2:mem:testdb
     driver-class-name: com.mysql.cj.jdbc.Driver
     #for h2 org.h2.Driver
-    username: root
+    username: ${db.username}
     #for h2 sa
-    password: kumar9905
+    password: ${db.password}
       #for h2 no password
 
     jpa:
