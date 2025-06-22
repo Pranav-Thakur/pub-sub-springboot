@@ -7,10 +7,11 @@ import com.example.pubsub.payload.response.UserSubscribeTopicResponse;
 import lombok.NonNull;
 import reactor.core.publisher.FluxSink;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface UserService {
     UserRegisterResponse register(@NonNull UserRegisterRequest registerRequest);
     UserSubscribeTopicResponse subscribe(@NonNull UUID id, @NonNull UserSubscribeTopicRequest request);
-    void consume(@NonNull UUID subcriberId, @NonNull FluxSink<String> emitter);
+    void consume(@NonNull UUID subscriberId, LocalDateTime offsetTime, @NonNull FluxSink<String> emitter);
 }

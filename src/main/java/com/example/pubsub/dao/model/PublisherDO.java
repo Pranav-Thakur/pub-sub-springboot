@@ -5,15 +5,14 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
 @Table(name = "publisher", indexes = {
-        @Index(name = "idx_company_name", columnList = "companyName")
+        @Index(name = "idx_publisher_company_name", columnList = "companyName")
 })
-public class PublisherDO {
+public class PublisherDO extends AuditableBaseDO {
     @Id
     @GeneratedValue
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -25,7 +24,4 @@ public class PublisherDO {
 
     @Enumerated(EnumType.STRING)
     private PublisherStatus status;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private Integer version;
 }

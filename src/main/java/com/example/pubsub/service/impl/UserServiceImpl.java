@@ -3,14 +3,9 @@ package com.example.pubsub.service.impl;
 import com.example.pubsub.dao.constants.AppUserStatus;
 import com.example.pubsub.dao.constants.MessageStatus;
 import com.example.pubsub.dao.constants.SubscriberStatus;
-import com.example.pubsub.dao.model.AppUserDO;
-import com.example.pubsub.dao.model.MessageDO;
-import com.example.pubsub.dao.model.SubscriberDO;
-import com.example.pubsub.dao.model.TopicDO;
-import com.example.pubsub.dao.service.AppUserRepoService;
-import com.example.pubsub.dao.service.MessageRepoService;
-import com.example.pubsub.dao.service.SubscriberRepoService;
-import com.example.pubsub.dao.service.TopicRepoService;
+import com.example.pubsub.dao.model.*;
+import com.example.pubsub.dao.service.*;
+import com.example.pubsub.dto.ConsumerPublisherDTO;
 import com.example.pubsub.payload.request.UserRegisterRequest;
 import com.example.pubsub.payload.request.UserSubscribeTopicRequest;
 import com.example.pubsub.payload.response.UserRegisterResponse;
@@ -44,6 +39,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ConsumerPublisher consumerPublisher;
 
+    @Autowired
+    private TransactionRepoService transactionRepoService;
+
     @Override
     public UserRegisterResponse register(@NonNull UserRegisterRequest registerRequest) {
         AppUserDO appUserDO = new  AppUserDO();
@@ -67,7 +65,7 @@ public class UserServiceImpl implements UserService {
         subscriberDO.setUser(appUserDO);
         subscriberDO.setTopic(topicDO);
         subscriberDO.setStatus(SubscriberStatus.ACTIVE);
-        subscriberDO.setLastMessageDeliveredDate(null);
+        subscriberDO.setOffsetTime(null);
         subscriberDO = subscriberRepoService.save(subscriberDO);
 
         UserSubscribeTopicResponse response = new UserSubscribeTopicResponse();
@@ -76,12 +74,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void consume(@NonNull UUID subscriberId, @NonNull FluxSink<String> emitter) {
+    public void consume(@NonNull UUID subscriberId, LocalDateTime offsetTime, @NonNull FluxSink<String> emitter) {
         SubscriberDO subscriberDO = subscriberRepoService.getSubscriberById(subscriberId);
-        LocalDateTime localDateTime = subscriberDO.getLastMessageDeliveredDate() == null ? LocalDateTime.of(1970, 1, 1, 0, 0) : subscriberDO.getLastMessageDeliveredDate();
-        consumerPublisher.registerListener(subscriberDO.getTopic().getId(), emitter);
-        List<MessageDO> messageDOList = messageRepoService.getAllMessagesBy(
-                subscriberDO.getTopic().getId(), MessageStatus.RECEIVED, localDateTime);
-
+        ConsumerPublisherDTO consumerPublisherDTO = new ConsumerPublisherDTO();
+        consumerPublisherDTO.setSubscriberId(subscriberId);
+        consumerPublisherDTO.setTopicId(subscriberDO.getTopic().getId());
+        consumerPublisherDTO.setUserId(subscriberDO.getUser().getId());
+        consumerPublisherDTO.setOffsetTime(offsetTime != null ? offsetTime : LocalDateTime.now());
+        consumerPublisher.registerListener(consumerPublisherDTO, emitter);
+        emitter.next("Hello");
     }
 }

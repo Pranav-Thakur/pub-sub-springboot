@@ -28,12 +28,6 @@ public class SubscriberRepoServiceImpl implements SubscriberRepoService {
 
     @Override
     public SubscriberDO save(@NonNull SubscriberDO subscriberDO) {
-        fillBaseDO(subscriberDO);
-        return subscriberRepository.save(subscriberDO);
-    }
-
-    @Override
-    public SubscriberDO update(@NonNull SubscriberDO subscriberDO) {
         return subscriberRepository.save(subscriberDO);
     }
 }

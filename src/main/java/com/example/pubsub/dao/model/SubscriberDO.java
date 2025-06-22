@@ -11,10 +11,10 @@ import java.util.UUID;
 @Entity
 @Data
 @Table(name = "subscriber", indexes = {
-        @Index(name = "idx_topic_id", columnList = "topic_id"),
-        @Index(name = "idx_user_id", columnList = "user_id")
+        @Index(name = "idx_subscriber_topic_id", columnList = "topic_id"),
+        @Index(name = "idx_subscriber_user_id", columnList = "user_id")
 })
-public class SubscriberDO {
+public class SubscriberDO extends AuditableBaseDO {
     @Id
     @GeneratedValue
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -32,8 +32,5 @@ public class SubscriberDO {
     @Enumerated(EnumType.STRING)
     private SubscriberStatus status;
 
-    private LocalDateTime lastMessageDeliveredDate;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private Integer version;
+    private LocalDateTime offsetTime;
 }

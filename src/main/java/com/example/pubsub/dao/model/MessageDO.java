@@ -5,15 +5,14 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
 @Table(name = "message", indexes = {
-        @Index(name = "idx_topic_id", columnList = "topic_id")
+        @Index(name = "idx_message_topic_id", columnList = "topic_id")
 })
-public class MessageDO {
+public class MessageDO extends AuditableBaseDO {
     @Id
     @GeneratedValue
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -30,7 +29,4 @@ public class MessageDO {
 
     @Enumerated(EnumType.STRING)
     private MessageStatus status;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private Integer version;
 }

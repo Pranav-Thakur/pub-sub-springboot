@@ -28,12 +28,6 @@ public class AppUserRepoServiceImpl implements AppUserRepoService {
 
     @Override
     public AppUserDO save(@NonNull AppUserDO appUserDO) {
-        fillBaseDO(appUserDO);
-        return appUserRepository.save(appUserDO);
-    }
-
-    @Override
-    public AppUserDO update(@NonNull AppUserDO appUserDO) {
         return appUserRepository.save(appUserDO);
     }
 }

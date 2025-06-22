@@ -36,13 +36,7 @@ public class PublisherRepoServiceImpl implements PublisherRepoService {
 
     @Override
     public PublisherDO save(@NonNull PublisherDO publisherDO) {
-        fillBaseDO(publisherDO);
         return publisherRepository.save(publisherDO);
-    }
-
-    @Override
-    public PublisherDO update(@NonNull PublisherDO updatedPublisherDO) {
-        return publisherRepository.save(updatedPublisherDO);
     }
 
     @Override

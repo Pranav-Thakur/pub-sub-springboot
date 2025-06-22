@@ -5,13 +5,12 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
 @Table(name = "app_user")
-public class AppUserDO {
+public class AppUserDO extends AuditableBaseDO {
     @Id
     @GeneratedValue
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -23,7 +22,4 @@ public class AppUserDO {
 
     @Enumerated(EnumType.STRING)
     private AppUserStatus status;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private Integer version;
 }

@@ -1,10 +1,10 @@
 package com.example.pubsub.dao.model;
 
+import com.example.pubsub.dao.constants.TransactionStatus;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -13,7 +13,7 @@ import java.util.UUID;
         @Index(name = "idx_message_id", columnList = "message_id"),
         @Index(name = "idx_subscriber_id", columnList = "subscriber_id")
 })
-public class TransactionDO {
+public class TransactionDO extends AuditableBaseDO {
     @Id
     @GeneratedValue
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -28,8 +28,6 @@ public class TransactionDO {
     @JoinColumn(name = "subscriber_id")
     private SubscriberDO subscriber;
 
-    private String status;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
-    private Integer version;
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
 }

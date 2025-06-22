@@ -1,6 +1,5 @@
 package com.example.pubsub.dao.service.impl;
 
-import com.example.pubsub.dao.model.PublisherDO;
 import com.example.pubsub.dao.model.TopicDO;
 import com.example.pubsub.dao.repository.TopicRepository;
 import com.example.pubsub.dao.service.TopicRepoService;
@@ -36,12 +35,6 @@ public class TopicRepoServiceImpl implements TopicRepoService {
 
     @Override
     public TopicDO save(@NonNull TopicDO topicDO) {
-        fillBaseDO(topicDO);
-        return topicRepository.save(topicDO);
-    }
-
-    @Override
-    public TopicDO update(@NonNull TopicDO topicDO) {
         return topicRepository.save(topicDO);
     }
 }

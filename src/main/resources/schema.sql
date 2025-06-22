@@ -9,7 +9,7 @@ CREATE TABLE publisher (
                            version INT
 );
 
-CREATE INDEX idx_company_name ON publisher(company_name);
+CREATE INDEX idx_publisher_company_name ON publisher(company_name);
 
 CREATE TABLE app_user (
     --id UUID PRIMARY KEY, for later or postgre
@@ -43,7 +43,7 @@ CREATE TABLE subscriber (
                             id BINARY(16) PRIMARY KEY,
                             user_id BINARY(16),
                             topic_id BINARY(16),
-                            last_message_delivered_date TIMESTAMP,
+                            offset_time TIMESTAMP,
                             status VARCHAR(50),
                             created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                             updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -52,8 +52,9 @@ CREATE TABLE subscriber (
                             FOREIGN KEY (topic_id) REFERENCES topic(id)
 );
 
-CREATE INDEX idx_topic_id ON subscriber(topic_id);
-CREATE INDEX idx_user_id ON subscriber(user_id);
+-- ALTER TABLE `pubsub_db`.`subscriber` CHANGE `last_message_delivered_date` `offset_time` timestamp NULL;
+CREATE INDEX idx_subscriber_topic_id ON subscriber(topic_id);
+CREATE INDEX idx_subscriber_user_id ON subscriber(user_id);
 
 CREATE TABLE message (
      --id UUID PRIMARY KEY, for later or postgre
@@ -67,7 +68,7 @@ CREATE TABLE message (
                          FOREIGN KEY (topic_id) REFERENCES topic(id)
 );
 
-CREATE INDEX idx_topic_id ON message(topic_id);
+CREATE INDEX idx_message_topic_id ON message(topic_id);
 
 CREATE TABLE transaction (
     --id UUID PRIMARY KEY, for later or postgre
@@ -75,8 +76,8 @@ CREATE TABLE transaction (
                              message_id BINARY(16),
                              subscriber_id BINARY(16),
                              status VARCHAR(50),
-                             created_date TIMESTAMP,
-                             updated_date TIMESTAMP,
+                             created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                             updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                              version INT,
                              FOREIGN KEY (message_id) REFERENCES message(id),
                              FOREIGN KEY (subscriber_id) REFERENCES subscriber(id)

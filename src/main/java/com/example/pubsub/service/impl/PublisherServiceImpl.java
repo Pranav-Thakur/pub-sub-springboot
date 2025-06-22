@@ -120,7 +120,10 @@ public class PublisherServiceImpl implements PublisherService {
         messageDO.setStatus(MessageStatus.RECEIVED);
         messageDO = messageRepoService.save(messageDO);
 
-        consumerPublisher.publishToTopic(topicDO.getId(), messageDO);
+        if (consumerPublisher.publishForTopic(topicDO.getId(), messageDO)) {
+            messageDO.setStatus(MessageStatus.SENT);
+            messageDO = messageRepoService.save(messageDO);
+        }
 
         PublisherMessageTopicResponse response = new PublisherMessageTopicResponse();
         response.setPublisherId(publisherDO.getId());

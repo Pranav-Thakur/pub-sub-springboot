@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -30,9 +31,9 @@ public class SubscriberController {
     }
 
     @GetMapping(value = "/consume", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> subscribe(@RequestParam UUID subscriberId) {
+    public Flux<String> subscribe(@RequestParam UUID subscriberId, @RequestParam(required = false) LocalDateTime offsetTime) {
         return Flux.create(emitter -> {
-            service.consume(subscriberId, emitter);
+            service.consume(subscriberId, offsetTime, emitter);
         });
     }
 }

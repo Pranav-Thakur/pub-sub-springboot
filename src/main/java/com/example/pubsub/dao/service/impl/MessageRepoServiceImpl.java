@@ -33,17 +33,11 @@ public class MessageRepoServiceImpl implements MessageRepoService {
 
     @Override
     public MessageDO save(@NonNull MessageDO messageDO) {
-        fillBaseDO(messageDO);
-        return messageRepository.save(messageDO);
-    }
-
-    @Override
-    public MessageDO update(@NonNull MessageDO messageDO) {
         return messageRepository.save(messageDO);
     }
 
     @Override
     public List<MessageDO> getAllMessagesBy(@NonNull UUID id, MessageStatus received, LocalDateTime localDateTime) {
-        return messageRepository.findByTopicIdAndStatusAndCreatedDate(id, received, localDateTime).orElse(new ArrayList<>());
+        return messageRepository.findByTopicIdAndStatusAndCreatedDateAfter(id, received, localDateTime).orElse(new ArrayList<>());
     }
 }
