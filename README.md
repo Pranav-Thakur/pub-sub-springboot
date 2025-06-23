@@ -1,32 +1,32 @@
-# Pub-Sub Spring Boot Messaging System
+# 📦 Spring Boot Pub-Sub Messaging System
 
-A lightweight, Kafka-inspired Publish-Subscribe system built using Java 11, Spring Boot, WebFlux, and H2/MySQL support.  
-The project mimics real-world Kafka producer/consumer behavior without relying on Kafka dependencies.
+A lightweight, message-driven backend service built with Spring Boot using Java 11, WebFlux, and H2/MySQL support, designed to deliver messages to subscribers using an offset-based pub-sub mechanism (like Kafka, but simpler and lighter).
+
+---
+## 🛠 Tech Stack
+
+| Layer        | Tech                  |
+|--------------|-----------------------|
+| Backend      | Spring Boot (Java 11) |
+| Build Tool   | Maven                 |
+| Library      | JPA,Hibernate,Lombok  |
+| Database     | MySQL (via Railway)   |
+| Deployment   | Docker + Render       |
+| CI/CD        | GitHub Actions        |
+| Secrets      | Render Secret Files   |
+| Testing Tool | Postman               |
 
 ---
 
-## 🔧 Tech Stack
+## 🚀 Features
 
-- Java 11
-- Spring Boot (2.7.x)
-- Spring Web / WebFlux (SSE support)
-- H2 (in-memory) / MySQL (persistent)
-- JPA + Hibernate
-- Lombok
-- Maven
-
----
-
-## 📦 Features
-
-- ✅ Publisher-Topic-Subscriber model
-- ✅ In-memory and MySQL support
-- ✅ JSON string storage for flexible payloads
-- ✅ UUID-based primary keys
-- ✅ API-based event push (like Kafka producer)
-- ✅ CLI-based persistent subscriber (like Kafka consumer)
-- ✅ Global logging interceptor for all HTTP requests/responses
-- ✅ SSE (Server-Sent Events) for real-time message delivery to subscribers
+- 📬 Publish-Subscribe message system using REST APIs, JSON flexible payloads
+- 🧭 Offset-based message retrieval for each subscriber
+- ✅ CLI-based persistent subscriber SSE (Server-Sent Events), (like Kafka consumer)
+- 🔐 Environment-specific config with `application-prod.yml`
+- 🐳 Dockerized and deployed on Render (Singapore region)
+- 🛢️ MySQL integration via Railway (free-tier)
+- 🔄 CI/CD via GitHub Actions + Render deploy hook
 
 ---
 
@@ -44,6 +44,7 @@ src/
    ├── application.yml
    └── schema.sql (for MySQL)
 │── postman/collection-file.json
+│── Dockerfile, GitAction ci/cd
 
 ```
 
@@ -64,16 +65,69 @@ src/
 
 ---
 
-## 🚀 How to Run
+## ⚙️ Build & Run Locally
 
-### 1. Clone & Build
+### 🧪 Prerequisites
+
+- Java 11
+- Maven
+- MySQL (local or Railway)
 
 ```bash
 git clone git@github.com:Pranav-Thakur/pub-sub-springboot.git
 cd pub-sub-springboot
+
 ./mvnw clean install
 ./mvnw spring-boot:run
+
+mvn clean package -DskipTests
+java -jar target/app.jar --spring.profiles.active=prod
+
 ```
+---
+
+## 🐳 Docker Setup
+### 🔨 Build Docker Image
+- docker build -t pubsub-app .
+### 🚀 Run Container
+- docker run -p 8080:8080 pubsub-app
+
+---
+
+## ☁️ Cloud Deployment (Render)
+- Connect GitHub repo to Render
+- Use Docker deployment option
+- Add these secret files (in Render dashboard):
+
+### secret.properties
+- db.username=YOUR_USERNAME
+- db.password=YOUR_PASSWORD
+- db.url=<jdbc:mysql-url>
+### In application-prod, reference:
+- spring.config.import: optional:file:/etc/secrets/secret.properties
+
+---
+
+## 🛢️ MySQL on Railway
+- Railway auto-sleeps when idle
+- Grab DB connection info from Railway dashboard
+- Schema must be manually initialized OR use:
+
+---
+
+## 🔁 CI/CD via GitHub Actions
+- Location: .github/workflows/render-ci.yml
+
+### What It Does:
+- On push to main:
+- Builds the app
+- Uploads the artifact
+- Triggers Render deployment via webhook
+
+### 🔐 Webhook is stored in GitHub Secrets as RENDER_DEPLOY_HOOK
+
+---
+
 ```
 🌐 API Endpoints
 Method	    Endpoint	                               Description
@@ -82,12 +136,17 @@ POST	/api/v1/publisher/{id}/create-topic	       Topic created by publisher by Id
 POST	/api/v1/publisher/{id}/publish	           Send a message to topic by publisher Id
 POST	/api/v1/user/register	                   User is created for the subscriber system, may not be needed
 POST    /api/v1/user/{id}/subscribe                the consumer for the topic has to first subscribe
-POST    /api/v1/user/consume?subscriberId=UUID     the actual consumer who gets the message
+POST    /api/v1/user/consume?subscriberId=UUID&offsetTime=time     the actual consumer who gets the message, offset not required, if present => time reference
 ```
 ---
-## 📬 Postman Collection
+## 📬 Postman Collection for 🔍 API Testing
 
-You can test all APIs using the provided Postman collection:
+Use the Postman collection included in the repo (postman_collection.json), Import into Postman to Test endpoints like:
+- POST /publish
+- POST /subscribe
+- GET /messages/{subscriberId}
+
+### You can test all APIs using the provided Postman collection:
 
 🔗 [Download Pub-Sub API Collection](postman/pub-sub-api.postman_collection.json)
 
@@ -97,7 +156,8 @@ You can test all APIs using the provided Postman collection:
 
 ## 🧪 Testing with CMD Consumers
 - Use Java CLI or curl with SSE-compatible headers to simulate long-lived consumers.
-- curl http://localhost:8080/api/v1/user/consume?subscriberId=3d711ecb-48d0-4771-a368-47f9f0343df5
+- Local: curl http://localhost:8080/api/v1/user/consume?subscriberId=3d711ecb-48d0-4771-a368-47f9f0343df5
+- Prod : curl --location --request GET 'https://pub-sub-app.onrender.com/api/v1/user/consume?subscriberId=c62a6505-331c-4ea2-963e-540263bcd968'
 
 ---
 

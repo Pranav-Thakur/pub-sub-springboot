@@ -78,7 +78,8 @@ public class UserServiceImpl implements UserService {
         consumerPublisherDTO.setSubscriberId(subscriberId);
         consumerPublisherDTO.setTopicId(subscriberDO.getTopic().getId());
         consumerPublisherDTO.setUserId(subscriberDO.getUser().getId());
-        consumerPublisherDTO.setOffsetTime(offsetTime != null ? offsetTime : LocalDateTime.now());
+        // ie getting also unsent msgs from either consumer given offset or default offset of 1970.
+        consumerPublisherDTO.setOffsetTime(offsetTime != null ? offsetTime : LocalDateTime.of(1970, 1, 1, 0, 0));
         consumerPublisher.registerListener(consumerPublisherDTO, emitter);
         emitter.next("{\"data\": \"connection established.\"}");
     }

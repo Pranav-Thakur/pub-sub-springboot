@@ -15,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.FluxSink;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,10 +39,11 @@ public class ConsumerPublisherImpl implements ConsumerPublisher {
     public void deliverPendingMessages() {
         System.out.println("🔁 Running cron to deliver messages...");
 
-        LocalDateTime localDateTime = LocalDateTime.of(1970, 1, 1, 0, 0);
         List<MessageDO> messageDOList = new ArrayList<>();
-        for (UUID topicId : subscribers.keySet())
-            messageDOList.addAll(messageRepoService.getAllMessagesBy(topicId, MessageStatus.RECEIVED, localDateTime));
+        for (UUID topicId : subscribers.keySet()) {
+            ConsumerPublisherDTO dto = subscribers.get(topicId);
+            messageDOList.addAll(messageRepoService.getAllMessagesBy(topicId, MessageStatus.RECEIVED, dto.getOffsetTime()));
+        }
 
         for (MessageDO messageDO : messageDOList) {
             if (publishForTopic(messageDO.getTopic().getId(), messageDO)) {
@@ -59,9 +59,6 @@ public class ConsumerPublisherImpl implements ConsumerPublisher {
 
         ConsumerPublisherDTO dto = subscribers.get(topicId);
         if (dto != null && !dto.isEmpty()) {
-            if (dto.getOffsetTime().isAfter(messageDO.getCreatedDate())) {
-                // older messages
-            }
             int sinkClosed = 0, sinkOpen = 0;
             while (sinkClosed < dto.size()) {
                 FluxSink<String> sink = dto.get(new Random().nextInt(dto.size()));

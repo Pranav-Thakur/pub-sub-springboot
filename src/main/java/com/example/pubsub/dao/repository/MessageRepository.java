@@ -16,6 +16,4 @@ import java.util.UUID;
 public interface MessageRepository extends JpaRepository<MessageDO, UUID> {
     @Query("SELECT m FROM MessageDO m WHERE m.topic.id = :topicId AND m.createdDate > :lastSeen AND m.status = :status ORDER BY m.createdDate ASC")
     Optional<List<MessageDO>> findByTopicIdAndStatusAndCreatedDateAfter(@Param("topicId") UUID topicId, @Param("status") MessageStatus status, @Param("lastSeen") LocalDateTime lastSeen);
-
-    Optional<List<MessageDO>> findByTopicIdAndStatusAndCreatedDate(UUID topicId, MessageStatus status, LocalDateTime localDateTime);
 }

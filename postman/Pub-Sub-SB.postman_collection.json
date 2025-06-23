@@ -7,7 +7,42 @@
 	},
 	"item": [
 		{
-			"name": "Register Publisher",
+			"name": "Register Publisher-Prod",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Pranav Super Hero Inc\",\n    \"data\" : {\n        \"for\" : \"myself\",\n        \"to\" : \"me\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pub-sub-app.onrender.com/api/v1/publisher/register",
+					"protocol": "https",
+					"host": [
+						"pub-sub-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"publisher",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Publisher-Local",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -41,7 +76,7 @@
 			"response": []
 		},
 		{
-			"name": "Publisher Create Topic",
+			"name": "Publisher Create Topic-Prod",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -90,7 +125,56 @@
 			"response": []
 		},
 		{
-			"name": "Publisher Publish Message",
+			"name": "Publisher Create Topic-Local",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"topicName\": \"my-test-topic\",\n    \"data\" : {\n        \"buffer\" : \"1gb\",\n        \"loader\" : \"1tb\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/publisher/:id/create-topic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"publisher",
+						":id",
+						"create-topic"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "4422224d-a464-404f-8909-5e4e84a46d80",
+							"description": "this is id of publisher registered"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Publisher Publish Message-Prod",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -139,7 +223,56 @@
 			"response": []
 		},
 		{
-			"name": "User Register",
+			"name": "Publisher Publish Message-Local",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"topicId\": \"936fadb1-78ae-4703-a277-e18d30ca69ea\",\n    \"message\" : \"Hello from test!\",\n    \"data\" : {\n        \"buffer\" : \"1gb\",\n        \"loader\" : \"1tb\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/publisher/:id/publish",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"publisher",
+						":id",
+						"publish"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "4422224d-a464-404f-8909-5e4e84a46d80",
+							"description": "this is id of publisher registered"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Register-Prod",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -180,7 +313,98 @@
 			"response": []
 		},
 		{
-			"name": "User Subscribe Topic",
+			"name": "User Register-Local",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Kumar Pranav\",\n    \"data\" : {\n        \"title\" : \"Mr Thakur\",\n        \"buddhi\" : \"140 IQ\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"register"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Subscribe Topic-Prod",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"topicId\": \"10857226-8673-42f0-966f-a96fdb9a913b\",\n    \"data\" : {\n        \"subs\" : \"to listen to topics\",\n        \"okay\" : \"then listen\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pub-sub-app.onrender.com/api/v1/user/:id/subscribe",
+					"protocol": "https",
+					"host": [
+						"pub-sub-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						":id",
+						"subscribe"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "8d1dfb5e-3aca-4842-ba11-e2d4abb4a920",
+							"description": "this is user register id"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Subscribe Topic-Local",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -229,7 +453,56 @@
 			"response": []
 		},
 		{
-			"name": "User Consume Topic",
+			"name": "User Consume Topic-Prod",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"topicId\": \"936fadb1-78ae-4703-a277-e18d30ca69ea\",\n    \"data\" : {\n        \"subs\" : \"to listen to topics\",\n        \"okay\" : \"then listen\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/user/:id/subscribe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"user",
+						":id",
+						"subscribe"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "f9478f19-dfee-4cf0-be72-cbf201e9d6ca",
+							"description": "this is user register id"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Consume Topic Copy",
 			"request": {
 				"auth": {
 					"type": "noauth"
