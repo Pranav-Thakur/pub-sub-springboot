@@ -30,7 +30,7 @@ public class LoggingFilter implements Filter {
         String path = ((HttpServletRequest) request).getRequestURI();
 
         // 🛑 Bypass logging for streaming endpoints
-        if (path.startsWith("/api/v1/user/consume")) {
+        if (path.startsWith("/api/v1/user/consume") || path.startsWith("/health")) {
             chain.doFilter(request, response);
             return;
         }

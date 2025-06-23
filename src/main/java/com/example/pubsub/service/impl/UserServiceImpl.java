@@ -1,7 +1,6 @@
 package com.example.pubsub.service.impl;
 
 import com.example.pubsub.dao.constants.AppUserStatus;
-import com.example.pubsub.dao.constants.MessageStatus;
 import com.example.pubsub.dao.constants.SubscriberStatus;
 import com.example.pubsub.dao.model.*;
 import com.example.pubsub.dao.service.*;
@@ -19,7 +18,6 @@ import reactor.core.publisher.FluxSink;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -82,6 +80,6 @@ public class UserServiceImpl implements UserService {
         consumerPublisherDTO.setUserId(subscriberDO.getUser().getId());
         consumerPublisherDTO.setOffsetTime(offsetTime != null ? offsetTime : LocalDateTime.now());
         consumerPublisher.registerListener(consumerPublisherDTO, emitter);
-        emitter.next("Hello");
+        emitter.next("{\"data\": \"connection established.\"}");
     }
 }
