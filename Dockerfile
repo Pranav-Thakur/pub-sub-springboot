@@ -1,23 +1,21 @@
-# Use Java 11 base image as Render uses Java 11 in Singapore region
-# ---------- Stage 1: Build ----------
-FROM maven:3.8.5-eclipse-temurin-11 AS builder
+# Use Java 11 base image as Railway uses Java 11 in Singapore region
+# Dockerfile (Spring Boot 2.7 + Java 11 + Maven)
+FROM maven:3.8.5-openjdk-11 AS builder
 
 WORKDIR /app
 
-# Copy all project files
 COPY . .
 
-# Build the Spring Boot jar
+# Build your app
 RUN mvn clean package -DskipTests
 
-# ---------- Stage 2: Run ----------
-FROM eclipse-temurin:11-jdk-alpine
+# Use a slim JRE for running the app
+FROM openjdk:11-jre-slim
 
 WORKDIR /app
 
-# Copy built jar from stage 1
+# Copy the jar
 COPY --from=builder /app/target/*.jar app.jar
 
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
+# Run the app
+ENTRYPOINT ["java", "-jar", "app.jar"]
